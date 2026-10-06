@@ -310,12 +310,12 @@ export default function Topography({
         }
       }
 
-      currentMouse[0] += 0.08 * (targetMouse[0] - currentMouse[0]);
-      currentMouse[1] += 0.08 * (targetMouse[1] - currentMouse[1]);
+      currentMouse[0] += 0.04 * (targetMouse[0] - currentMouse[0]);
+      currentMouse[1] += 0.04 * (targetMouse[1] - currentMouse[1]);
       u.uMouse.value[0] = currentMouse[0];
       u.uMouse.value[1] = currentMouse[1];
 
-      mouseActive += 0.08 * (mouseActiveTarget - mouseActive);
+      mouseActive += 0.04 * (mouseActiveTarget - mouseActive);
       u.uMouseActive.value = mouseActive;
 
       renderer.render({ scene: mesh });
