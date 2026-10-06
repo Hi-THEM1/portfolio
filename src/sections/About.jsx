@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { portfolio } from '../content/portfolio';
+import { useLanguage } from '../i18n/useLanguage';
 import Icon from '../components/Icon';
 import Reveal from '../components/Reveal';
 
@@ -13,11 +14,12 @@ function getInitials(name) {
 
 export default function About() {
   const { identity, about } = portfolio;
+  const { t } = useLanguage();
   const [photoError, setPhotoError] = useState(false);
   const [photoLoaded, setPhotoLoaded] = useState(false);
 
   const initials = getInitials(identity.name);
-  const altText = identity.photoAlt || `Portrait of ${identity.name}`;
+  const altText = t(identity.photoAlt, `Portrait of ${identity.name}`);
   const showFallback = photoError || !identity.photo || !photoLoaded;
 
   return (
@@ -28,9 +30,9 @@ export default function About() {
       tabIndex={-1}
     >
       <Reveal className="section-header">
-        <div className="section-label font-mono">{about.sectionLabel}</div>
+        <div className="section-label font-mono">{t(about.sectionLabel)}</div>
         <h2 id="about-heading" className="section-title">
-          {about.sectionTitle}
+          {t(about.sectionTitle)}
         </h2>
       </Reveal>
 
@@ -66,18 +68,18 @@ export default function About() {
         <Reveal className="glass-panel about-panel" delay={120}>
           {about.paragraphs.map((p, i) => (
             <p key={i} className="about-paragraph">
-              {p}
+              {t(p)}
             </p>
           ))}
           <div className="currently-learning">
-            <Icon name="graduation" size={20} className="currently-icon" />
+            <Icon name="layers" size={20} className="currently-icon" />
             <div className="currently-text-wrap">
               {about.currentlyLabel && (
                 <span className="currently-label font-mono">
-                  {about.currentlyLabel}
+                  {t(about.currentlyLabel)}
                 </span>
               )}
-              <span className="currently-text">{about.currently}</span>
+              <span className="currently-text">{t(about.currently)}</span>
             </div>
           </div>
         </Reveal>

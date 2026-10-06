@@ -14,24 +14,72 @@
   --header-h: 64px;
   --rail-bp: 1280px;
 
-  /* ── Color Tokens ── */
-  --void: #07070a;
-  --neon: #ff2d55;
-  --coral: #ff5277;
+  /* ── Color Tokens (Dark Mode Default) ── */
+  --void: #070b14;
+  --low-bg: #0b1120;
+  --bg-dark: #070b14;
+  --neon: #22d3ee;
+  --coral: #38bdf8;
+  --cyan-bright: #38bdf8;
+  --cyan-deep: #06b6d4;
   --signal-live: #3ddc97;
-  --text-primary: #f4f4f6;
-  --text-secondary: #a1a1aa;
-  --text-muted: #9a9aa5;
-  --glass-border: rgba(255, 255, 255, 0.09);
-  --glass-floor: rgba(10, 10, 14, 0.72);
 
-  /* Compatibility aliases */
-  --bg-dark: var(--void);
+  /* Neon Brand Constants */
   --neon-red: var(--neon);
   --neon-coral: var(--coral);
-  --neon-red-glow: rgba(255, 45, 85, 0.45);
+  --neon-red-glow: rgba(34, 211, 238, 0.45);
+
+  /* Typography Colors */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-contrast: #ffffff;
+
+  /* Borders & Surfaces */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.20);
+  --glass-border: rgba(34, 211, 238, 0.12);
+  --glass-floor: rgba(11, 17, 32, 0.76);
   --surface-border: var(--glass-border);
-  --surface-card: rgba(14, 14, 18, 0.72);
+  --surface-card: rgba(11, 17, 32, 0.78);
+  --surface-card-rgb: 11, 17, 32;
+  --surface-subtle: rgba(255, 255, 255, 0.04);
+  --surface-subtle-hover: rgba(255, 255, 255, 0.08);
+  --surface-muted: rgba(255, 255, 255, 0.03);
+
+  /* Header & Navigation */
+  --header-bg: rgba(7, 7, 10, 0.75);
+  --header-border: rgba(255, 255, 255, 0.08);
+  --nav-link-color: rgba(255, 255, 255, 0.65);
+  --nav-link-hover: #ffffff;
+  --nav-link-active: var(--neon-red);
+  --mobile-menu-bg: rgba(7, 7, 10, 0.96);
+
+  /* Cards & Glass Shadows */
+  --panel-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.35);
+  --panel-shadow-hover: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 40px rgba(0, 0, 0, 0.45), 0 0 24px -6px rgba(34, 211, 238, 0.3);
+
+  /* Buttons & Inputs */
+  --btn-outline-bg: rgba(255, 255, 255, 0.04);
+  --btn-outline-border: rgba(255, 255, 255, 0.20);
+  --input-bg: rgba(255, 255, 255, 0.04);
+  --input-border: rgba(255, 255, 255, 0.12);
+  --input-color: #f8fafc;
+  --input-placeholder: #64748b;
+
+  /* Scrim overlay for light mode legibility */
+  --scrim-bg: transparent;
+
+  /* Custom Scrollbar */
+  --scrollbar-track: #070b14;
+  --scrollbar-thumb: #1e293b;
+  --scrollbar-thumb-hover: var(--neon);
+
+  /* Headings & Tags */
+  --gradient-heading: linear-gradient(135deg, #ffffff 20%, #22d3ee 65%, #06b6d4 100%);
+  --tag-bg: rgba(255, 255, 255, 0.04);
+  --tag-border: rgba(255, 255, 255, 0.08);
 
   /* ── Fluid Type Scale ── */
   --fs-hero: clamp(2.5rem, 6vw, 4.5rem);
@@ -57,6 +105,79 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ═══════════════════════════════════════════════════════
+   LIGHT THEME OVERRIDES ([data-theme="light"])
+   ═══════════════════════════════════════════════════════ */
+
+[data-theme="light"] {
+  --void: #f0fdfa;
+  --low-bg: #e6fcf5;
+  --bg-dark: #f0fdfa;
+
+  /* Accent & Brand Tokens: #0F766E */
+  --neon: #0f766e;
+  --coral: #0f766e;
+  --cyan-bright: #0f766e;
+  --cyan-deep: #115e59;
+  --neon-red: #0f766e;
+  --neon-coral: #0f766e;
+  --neon-red-glow: rgba(15, 118, 110, 0.30);
+
+  /* Cards & Surfaces: #FFFFFF */
+  --surface-card: #ffffff;
+  --surface-card-rgb: 255, 255, 255;
+  --surface-border: rgba(15, 118, 110, 0.14);
+  --surface-subtle: rgba(15, 118, 110, 0.05);
+  --surface-subtle-hover: rgba(15, 118, 110, 0.09);
+  --surface-muted: rgba(15, 118, 110, 0.03);
+  --glass-border: rgba(15, 118, 110, 0.14);
+  --glass-floor: #ffffff;
+
+  /* Text: #134E4A and refined hierarchy */
+  --text-primary: #134e4a;
+  --text-secondary: #2d6a65;
+  --text-muted: #547e7a;
+  --text-contrast: #042f2e;
+
+  /* Borders */
+  --border-subtle: rgba(19, 78, 74, 0.08);
+  --border-medium: rgba(19, 78, 74, 0.14);
+  --border-strong: rgba(15, 118, 110, 0.28);
+
+  /* Header & Navigation */
+  --header-bg: rgba(240, 253, 250, 0.88);
+  --header-border: rgba(15, 118, 110, 0.12);
+  --nav-link-color: rgba(19, 78, 74, 0.78);
+  --nav-link-hover: #0f766e;
+  --nav-link-active: #0f766e;
+  --mobile-menu-bg: rgba(240, 253, 250, 0.98);
+
+  /* Card Shadows */
+  --panel-shadow: 0 1px 3px rgba(19, 78, 74, 0.05), 0 8px 24px rgba(19, 78, 74, 0.06);
+  --panel-shadow-hover: 0 4px 14px rgba(15, 118, 110, 0.14), 0 16px 32px rgba(19, 78, 74, 0.09);
+
+  /* Buttons & Inputs */
+  --btn-outline-bg: #ffffff;
+  --btn-outline-border: rgba(15, 118, 110, 0.25);
+  --input-bg: #ffffff;
+  --input-border: rgba(15, 118, 110, 0.22);
+  --input-color: #134e4a;
+  --input-placeholder: #547e7a;
+
+  /* Scrim overlay for light mode legibility */
+  --scrim-bg: transparent;
+
+  /* Custom Scrollbar */
+  --scrollbar-track: #f0fdfa;
+  --scrollbar-thumb: #99f6e4;
+  --scrollbar-thumb-hover: #0f766e;
+
+  /* Headings & Tags */
+  --gradient-heading: linear-gradient(135deg, #042f2e 15%, #0f766e 70%, #115e59 100%);
+  --tag-bg: rgba(15, 118, 110, 0.07);
+  --tag-border: rgba(15, 118, 110, 0.20);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -65,12 +186,12 @@
 
 /* ── Selection Styling ── */
 ::selection {
-  background: var(--neon-red);
-  color: #ffffff;
+  background: var(--neon);
+  color: #070b14;
 }
 ::-moz-selection {
-  background: var(--neon-red);
-  color: #ffffff;
+  background: var(--neon);
+  color: #070b14;
 }
 
 /* Accessibility: WCAG 2.1 AA focus visible */
@@ -83,7 +204,6 @@ html {
   background-color: var(--void);
   width: 100%;
   min-height: 100%;
-  /* No native scroll-behavior: smooth — handled by Lenis to prevent inertia fighting */
 }
 
 body {
@@ -110,6 +230,7 @@ h1 {
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.05;
+  color: var(--text-primary);
 }
 
 h2 {
@@ -117,12 +238,14 @@ h2 {
   font-size: var(--fs-h2);
   font-weight: 700;
   letter-spacing: -0.01em;
+  color: var(--text-primary);
 }
 
 h3 {
   font-family: var(--font-display);
   font-size: var(--fs-h3);
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 p {
@@ -144,16 +267,16 @@ p {
 }
 
 ::-webkit-scrollbar-track {
-  background: #08090d;
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #232530;
+  background: var(--scrollbar-thumb);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--neon);
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -214,8 +337,8 @@ p {
 
 /* ── Outline: glass border ── */
 .btn-outline {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--btn-outline-bg);
+  border: 1px solid var(--btn-outline-border);
   color: var(--text-primary);
 }
 
@@ -256,7 +379,7 @@ p {
   }
 }
 
-/* ── Simulated Glass Recipe (0 backdrop-filter on in-flow elements) ── */
+/* ── Glass Panel Recipe ── */
 .glass-panel {
   background:
     linear-gradient(145deg,
@@ -266,23 +389,24 @@ p {
     var(--glass-floor);
   border: 1px solid var(--glass-border);
   border-radius: 14px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.10),
-    0 1px 2px rgba(0, 0, 0, 0.4),
-    0 12px 32px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--panel-shadow);
   transition: border-color var(--dur-base) var(--ease-out-expo),
               box-shadow var(--dur-base) var(--ease-out-expo),
               transform var(--dur-base) var(--ease-out-expo);
 }
 
+[data-theme="light"] .glass-panel {
+  background: var(--surface-card);
+}
+
 @media (hover: hover) {
   .glass-panel:hover {
-    border-color: rgba(255, 45, 85, 0.35);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.15),
-      0 1px 2px rgba(0, 0, 0, 0.4),
-      0 16px 40px rgba(0, 0, 0, 0.45),
-      0 0 24px -6px rgba(255, 45, 85, 0.3);
+    border-color: rgba(34, 211, 238, 0.35);
+    box-shadow: var(--panel-shadow-hover);
+  }
+
+  [data-theme="light"] .glass-panel:hover {
+    border-color: rgba(15, 118, 110, 0.35);
   }
 }
 

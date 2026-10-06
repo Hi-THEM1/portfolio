@@ -9,36 +9,41 @@ import {
   Copy,
   Check,
   Send,
-  Clock,
-  MapPin,
   ExternalLink,
-  MessageCircle,
-  Phone,
-  Calendar,
   MessageSquare,
   Code2,
   Cpu,
   Layers,
   Wrench,
-  GraduationCap,
   Users,
-  Rocket,
-  Target,
-  Lightbulb,
+  ShieldCheck,
+  Activity,
+  Zap,
+  Radio,
+  Globe,
+  Server,
+  Database,
+  CircuitBoard,
+  Terminal,
   FolderGit2,
   GitBranch,
-  Sparkles,
-  Terminal,
+  Sun,
+  Moon,
+  Languages,
+  Loader2,
+  Shuffle,
+  Lightbulb,
+  HeartHandshake,
+  Puzzle,
+  Download,
   Share2,
-  Link2,
-  Award,
 } from 'lucide-react';
 
 /**
  * Clean SVG components matching Lucide 24x24 vector grid specifications
- * for brand icons (GitHub, LinkedIn) not included in standard Lucide core.
+ * with strokeWidth 1.75 outline style.
  */
-function GithubIcon({ size = 20, className = '', ...props }) {
+function GithubIcon({ size = 18, strokeWidth = 1.75, className = '', ...props }) {
   return (
     <svg
       width={size}
@@ -46,7 +51,7 @@ function GithubIcon({ size = 20, className = '', ...props }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
@@ -58,7 +63,7 @@ function GithubIcon({ size = 20, className = '', ...props }) {
   );
 }
 
-function LinkedinIcon({ size = 20, className = '', ...props }) {
+function LinkedinIcon({ size = 18, strokeWidth = 1.75, className = '', ...props }) {
   return (
     <svg
       width={size}
@@ -66,7 +71,7 @@ function LinkedinIcon({ size = 20, className = '', ...props }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
@@ -80,7 +85,7 @@ function LinkedinIcon({ size = 20, className = '', ...props }) {
   );
 }
 
-function FacebookIcon({ size = 20, className = '', ...props }) {
+function FacebookIcon({ size = 18, strokeWidth = 1.75, className = '', ...props }) {
   return (
     <svg
       width={size}
@@ -88,7 +93,7 @@ function FacebookIcon({ size = 20, className = '', ...props }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
@@ -100,7 +105,7 @@ function FacebookIcon({ size = 20, className = '', ...props }) {
   );
 }
 
-function InstagramIcon({ size = 20, className = '', ...props }) {
+function InstagramIcon({ size = 18, strokeWidth = 1.75, className = '', ...props }) {
   return (
     <svg
       width={size}
@@ -108,7 +113,7 @@ function InstagramIcon({ size = 20, className = '', ...props }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
@@ -123,50 +128,84 @@ function InstagramIcon({ size = 20, className = '', ...props }) {
 }
 
 const ICON_MAP = {
+  // Navigation & Controls
   menu: Menu,
   x: X,
+  sun: Sun,
+  moon: Moon,
+  languages: Languages,
+  globe: Globe,
   'arrow-right': ArrowRight,
   'arrow-up-right': ArrowUpRight,
   'arrow-up': ArrowUp,
   'arrow-down': ArrowDown,
+  download: Download,
+  cv: Download,
+
+  // Communication & Actions
   mail: Mail,
   copy: Copy,
   check: Check,
   send: Send,
-  clock: Clock,
-  'map-pin': MapPin,
   'external-link': ExternalLink,
+  share: Share2,
+
+  // Technical & Industrial Vibe (Approved Precision Set)
+  cpu: Cpu,
+  code: Code2,
+  'code-2': Code2,
+  terminal: Terminal,
+  layers: Layers,
+  wrench: Wrench,
+  radio: Radio,
+  activity: Activity,
+  clock: Activity,
+  zap: Zap,
+  server: Server,
+  database: Database,
+  'circuit-board': CircuitBoard,
+  'git-branch': GitBranch,
+  folder: FolderGit2,
+  'folder-git-2': FolderGit2,
+  'loader-2': Loader2,
+  loader: Loader2,
+
+  // Collaboration & Soft Skills Set
+  users: Users,
+  'message-square': MessageSquare,
+  'messages-square': MessageSquare,
+  'shield-check': ShieldCheck,
+  shield: ShieldCheck,
+  target: ShieldCheck,
+  shuffle: Shuffle,
+  lightbulb: Lightbulb,
+  puzzle: Puzzle,
+  'heart-handshake': HeartHandshake,
+  rocket: Zap,
+  graduation: Layers,
+
+  // Social Channels
   github: GithubIcon,
   linkedin: LinkedinIcon,
   facebook: FacebookIcon,
   instagram: InstagramIcon,
-  'message-circle': MessageCircle,
-  phone: Phone,
-  calendar: Calendar,
-  'message-square': MessageSquare,
-  code: Code2,
-  cpu: Cpu,
-  layers: Layers,
-  wrench: Wrench,
-  graduation: GraduationCap,
-  users: Users,
-  rocket: Rocket,
-  target: Target,
-  lightbulb: Lightbulb,
-  folder: FolderGit2,
-  'git-branch': GitBranch,
-  sparkles: Sparkles,
-  terminal: Terminal,
-  share: Share2,
-  link: Link2,
-  award: Award,
 };
 
+
+
 /**
- * Single wrapper that maps string icon names from portfolio.js to Lucide components.
- * Always sets aria-hidden="true" and provides consistent default sizing (20px).
+ * Unified Icon component:
+ * - Always strokeWidth = 1.75 for visual consistency
+ * - aria-hidden="true" by default
+ * - Default size = 18 for buttons and cards
  */
-export default function Icon({ name, size = 20, className = '', ...props }) {
+export default function Icon({
+  name,
+  size = 18,
+  strokeWidth = 1.75,
+  className = '',
+  ...props
+}) {
   if (!name) return null;
   const normalizedKey = String(name).toLowerCase().trim();
   const Component = ICON_MAP[normalizedKey];
@@ -178,6 +217,7 @@ export default function Icon({ name, size = 20, className = '', ...props }) {
   return (
     <Component
       size={size}
+      strokeWidth={strokeWidth}
       className={className}
       aria-hidden="true"
       {...props}

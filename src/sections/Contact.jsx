@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { portfolio } from '../content/portfolio';
+import { useLanguage } from '../i18n/useLanguage';
 import Icon from '../components/Icon';
 import Reveal from '../components/Reveal';
 
 export default function Contact() {
   const { contact, identity } = portfolio;
+  const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
 
   /* ── Accessible copy-to-clipboard with fallback ── */
@@ -50,7 +52,7 @@ export default function Contact() {
   const methods = contact.methods || [];
   const emailMethod = methods.find((m) => m.id === 'email') || {
     id: 'email',
-    label: 'Direct Email',
+    label: { en: 'Direct Email', fr: 'E-mail Direct' },
     value: identity.email,
     url: `mailto:${identity.email}`,
     icon: 'mail',
@@ -65,41 +67,45 @@ export default function Contact() {
       tabIndex={-1}
     >
       <Reveal className="section-header">
-        <div className="section-label font-mono">{contact.sectionLabel}</div>
+        <div className="section-label font-mono">{t(contact.sectionLabel)}</div>
         <h2 id="contact-heading" className="section-title">
-          {contact.heading}
+          {t(contact.heading)}
         </h2>
-        <p className="section-subtitle">{contact.subtitle}</p>
+        <p className="section-subtitle">{t(contact.subtitle)}</p>
       </Reveal>
 
       <Reveal className="contact-layout contact-layout-direct">
-        {/* Primary Contact Channels Grid: GitHub, LinkedIn, Facebook, Instagram */}
+        {/* Primary Contact Channels Grid */}
         <div className="contact-methods-grid" aria-label="Social and developer profiles">
-          {socialMethods.map((method, idx) => (
-            <Reveal
-              key={method.id}
-              as="a"
-              href={method.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass-panel contact-method-card"
-              aria-label={`${method.label}: ${method.value}`}
-              delay={idx * 60}
-            >
-              <div className="method-main">
-                <div className="method-icon-wrap" aria-hidden="true">
-                  <Icon name={method.icon} size={22} />
+          {socialMethods.map((method, idx) => {
+            const isDownload = Boolean(method.download || method.id === 'cv');
+            return (
+              <Reveal
+                key={method.id}
+                as="a"
+                href={method.url}
+                download={isDownload ? (method.download || 'Haythem-Chabbeh-CV.pdf') : undefined}
+                target={isDownload ? undefined : '_blank'}
+                rel={isDownload ? undefined : 'noopener noreferrer'}
+                className={`glass-panel contact-method-card ${isDownload ? 'contact-method-cv' : ''}`}
+                aria-label={isDownload ? 'Download my CV (PDF)' : `${t(method.label)}: ${t(method.value)}`}
+                delay={idx * 60}
+              >
+                <div className="method-main">
+                  <div className="method-icon-wrap" aria-hidden="true">
+                    <Icon name={method.icon} size={20} />
+                  </div>
+                  <div className="method-info">
+                    <span className="method-label">{t(method.label)}</span>
+                    <span className="method-value font-mono">{t(method.value)}</span>
+                  </div>
                 </div>
-                <div className="method-info">
-                  <span className="method-label">{method.label}</span>
-                  <span className="method-value font-mono">{method.value}</span>
+                <div className="method-arrow" aria-hidden="true">
+                  <Icon name={isDownload ? 'download' : 'arrow-up-right'} size={18} />
                 </div>
-              </div>
-              <div className="method-arrow" aria-hidden="true">
-                <Icon name="arrow-up-right" size={18} />
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
         </div>
 
         {/* Executive Email Card with Copy & Direct Mail */}
@@ -118,12 +124,14 @@ export default function Contact() {
         >
           <div className="method-main">
             <div className="method-icon-wrap" aria-hidden="true">
-              <Icon name="mail" size={22} />
+              <Icon name="mail" size={20} />
             </div>
             <div className="method-info">
-              <span className="method-label">{emailMethod.label}</span>
+              <span className="method-label">{t(emailMethod.label)}</span>
               <span className="method-value font-mono">
-                {copied ? 'Copied to clipboard!' : identity.email}
+                {copied
+                  ? t({ en: 'Copied to clipboard!', fr: 'Copié dans le presse-papier !' })
+                  : identity.email}
               </span>
             </div>
           </div>
@@ -133,20 +141,30 @@ export default function Contact() {
               type="button"
               className={`icon-action-btn ${copied ? 'is-active' : ''}`}
               onClick={handleCopyEmail}
-              aria-label={copied ? 'Email copied' : 'Copy email address'}
-              title={copied ? 'Email copied' : 'Copy email address'}
+              aria-label={
+                copied
+                  ? t({ en: 'Email copied', fr: 'E-mail copié' })
+                  : t({ en: 'Copy email address', fr: "Copier l'adresse e-mail" })
+              }
+              title={
+                copied
+                  ? t({ en: 'Email copied', fr: 'E-mail copié' })
+                  : t({ en: 'Copy email address', fr: "Copier l'adresse e-mail" })
+              }
             >
               <Icon name={copied ? 'check' : 'copy'} size={18} />
               <span className="tooltip-feedback" role="status">
-                {copied ? 'Copied!' : 'Copy'}
+                {copied
+                  ? t({ en: 'Copied!', fr: 'Copié !' })
+                  : t({ en: 'Copy', fr: 'Copier' })}
               </span>
             </button>
 
             <a
               href={`mailto:${identity.email}`}
               className="icon-action-btn"
-              aria-label="Open mail app"
-              title="Open mail application"
+              aria-label={t({ en: 'Open mail app', fr: 'Ouvrir messagerie' })}
+              title={t({ en: 'Open mail application', fr: 'Ouvrir application de messagerie' })}
               onClick={(e) => e.stopPropagation()}
             >
               <Icon name="arrow-up-right" size={18} />
@@ -156,9 +174,9 @@ export default function Contact() {
 
         {/* Location & Timezone Meta */}
         <div className="contact-meta-line font-mono">
-          <Icon name="clock" size={16} />
+          <Icon name="activity" size={16} />
           <span>
-            {identity.location} ({identity.timezone}) · {contact.responseTimePromise}
+            {t(identity.location)} ({identity.timezone}) · {t(contact.responseTimePromise)}
           </span>
         </div>
       </Reveal>

@@ -1,30 +1,35 @@
 import { portfolio } from '../content/portfolio';
+import { useLanguage } from '../i18n/useLanguage';
 import Icon from '../components/Icon';
 import Reveal from '../components/Reveal';
 
 export default function Education() {
   const { education } = portfolio;
+  const { t } = useLanguage();
+
   const present = education.present || {
-    tag: 'Higher Education',
-    status: 'Current Studies (In Progress)',
+    tag: { en: 'Higher Education', fr: 'Enseignement Supérieur' },
+    status: { en: 'Current Studies (In Progress)', fr: 'En cours (En progression)' },
     degree: education.degree,
     institution: education.university,
     period: education.period,
-    location: 'Sousse, Tunisia',
-    courseworkLabel: education.courseworkLabel || 'Core Coursework',
+    location: { en: 'Sousse, Tunisia', fr: 'Sousse, Tunisie' },
+    courseworkLabel: education.courseworkLabel || { en: 'Core Coursework', fr: 'Enseignements Clés' },
     coursework: education.coursework || [],
   };
 
   const bac = education.bac || {
-    tag: 'Secondary Education',
-    status: 'Graduated / Completed',
-    degree: 'Baccalaureate in Mathematics',
-    institution: 'Tunisian Ministry of Education',
+    tag: { en: 'Secondary Education', fr: 'Enseignement Secondaire' },
+    status: { en: 'Graduated / Completed', fr: 'Diplômé / Obtenu' },
+    degree: { en: 'Baccalaureate in Mathematics', fr: 'Baccalauréat en Mathématiques' },
+    institution: { en: 'Tunisian Ministry of Education', fr: "Ministère de l'Éducation Tunisien" },
     period: '2024',
-    location: 'Tunisia',
-    focusLabel: 'Academic Foundation',
-    focus:
-      'Rigorous mathematical analysis, algorithmic thinking, physics, and scientific problem-solving.',
+    location: { en: 'Tunisia', fr: 'Tunisie' },
+    focusLabel: { en: 'Academic Foundation', fr: 'Socle Académique' },
+    focus: {
+      en: 'Rigorous mathematical analysis, algorithmic thinking, physics, and scientific problem-solving.',
+      fr: 'Analyse mathématique rigoureuse, pensée algorithmique, physique et résolution de problèmes scientifiques.',
+    },
   };
 
   return (
@@ -35,9 +40,9 @@ export default function Education() {
       tabIndex={-1}
     >
       <Reveal className="section-header">
-        <div className="section-label font-mono">{education.sectionLabel}</div>
+        <div className="section-label font-mono">{t(education.sectionLabel)}</div>
         <h2 id="education-heading" className="section-title">
-          {education.sectionTitle}
+          {t(education.sectionTitle)}
         </h2>
       </Reveal>
 
@@ -47,22 +52,22 @@ export default function Education() {
           <div className="education-card-badge-row">
             <span className="education-stage-badge font-mono">
               <span className="education-live-dot" aria-hidden="true" />
-              {present.status}
+              {t(present.status)}
             </span>
-            <span className="education-period font-mono">{present.period}</span>
+            <span className="education-period font-mono">{t(present.period)}</span>
           </div>
 
           <div className="education-card-main">
             <div className="education-icon-wrap" aria-hidden="true">
-              <Icon name="graduation" size={24} />
+              <Icon name="layers" size={22} />
             </div>
             <div>
-              <h3 className="education-degree-title">{present.degree}</h3>
-              <p className="education-institution">{present.institution}</p>
+              <h3 className="education-degree-title">{t(present.degree)}</h3>
+              <p className="education-institution">{t(present.institution)}</p>
               {present.location && (
                 <div className="education-location-line font-mono">
-                  <Icon name="map-pin" size={14} />
-                  <span>{present.location}</span>
+                  <Icon name="globe" size={14} />
+                  <span>{t(present.location)}</span>
                 </div>
               )}
             </div>
@@ -70,11 +75,11 @@ export default function Education() {
 
           {present.coursework && present.coursework.length > 0 && (
             <div className="education-coursework">
-              <h4 className="coursework-label">{present.courseworkLabel}</h4>
+              <h4 className="coursework-label">{t(present.courseworkLabel)}</h4>
               <ul className="coursework-list">
-                {present.coursework.map((course) => (
-                  <li key={course} className="tech-pill">
-                    {course}
+                {present.coursework.map((course, idx) => (
+                  <li key={idx} className="tech-pill">
+                    {t(course)}
                   </li>
                 ))}
               </ul>
@@ -87,30 +92,30 @@ export default function Education() {
           <div className="education-card-badge-row">
             <span className="education-stage-badge education-stage-badge-completed font-mono">
               <Icon name="check" size={12} />
-              {bac.status}
+              {t(bac.status)}
             </span>
-            <span className="education-period font-mono">{bac.period}</span>
+            <span className="education-period font-mono">{t(bac.period)}</span>
           </div>
 
           <div className="education-card-main">
             <div className="education-icon-wrap education-icon-wrap-bac" aria-hidden="true">
-              <Icon name="award" size={24} />
+              <Icon name="shield-check" size={22} />
             </div>
             <div>
-              <h3 className="education-degree-title">{bac.degree}</h3>
-              <p className="education-institution">{bac.institution}</p>
+              <h3 className="education-degree-title">{t(bac.degree)}</h3>
+              <p className="education-institution">{t(bac.institution)}</p>
               {bac.location && (
                 <div className="education-location-line font-mono">
-                  <Icon name="map-pin" size={14} />
-                  <span>{bac.location}</span>
+                  <Icon name="globe" size={14} />
+                  <span>{t(bac.location)}</span>
                 </div>
               )}
             </div>
           </div>
 
           <div className="education-coursework">
-            <h4 className="coursework-label">{bac.focusLabel || 'Academic Foundation'}</h4>
-            <p className="education-bac-focus">{bac.focus}</p>
+            <h4 className="coursework-label">{t(bac.focusLabel, 'Academic Foundation')}</h4>
+            <p className="education-bac-focus">{t(bac.focus)}</p>
           </div>
         </Reveal>
       </div>

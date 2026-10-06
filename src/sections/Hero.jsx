@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { portfolio } from '../content/portfolio';
+import { useLanguage } from '../i18n/useLanguage';
 import Icon from '../components/Icon';
 import Reveal from '../components/Reveal';
 
@@ -11,17 +12,20 @@ const DEFAULT_CYCLING_PHRASES = [
 ];
 
 const DEFAULT_METRICS = [
-  { value: 3, suffix: '+', label: 'Shipped Projects' },
-  { value: 6, suffix: '+', label: 'Core Technologies' },
-  { value: 100, suffix: '%', label: 'Commitment to Quality' },
+  { value: 3, suffix: '+', label: { en: 'Shipped Projects', fr: 'Projets Déployés' } },
+  { value: 6, suffix: '+', label: { en: 'Core Technologies', fr: 'Technologies Maîtrisées' } },
+  { value: 100, suffix: '%', label: { en: 'Commitment to Quality', fr: 'Engagement Qualité' } },
 ];
 
 export default function Hero({ scrollToSection }) {
   const { hero, identity } = portfolio;
-  const phrases = useMemo(
-    () => hero.cyclingPhrases || DEFAULT_CYCLING_PHRASES,
-    [hero.cyclingPhrases]
-  );
+  const { t } = useLanguage();
+
+  const phrases = useMemo(() => {
+    const raw = hero.cyclingPhrases || DEFAULT_CYCLING_PHRASES;
+    return raw.map((p) => t(p));
+  }, [hero.cyclingPhrases, t]);
+
   const metrics = useMemo(
     () => hero.metrics || DEFAULT_METRICS,
     [hero.metrics]
@@ -46,15 +50,15 @@ export default function Hero({ scrollToSection }) {
   const heroSectionRef = useRef(null);
   const primaryCtaRef = useRef(null);
 
-  // Status availability check: if availableUntil not specified, default to true so identity.status displays
+  // Status availability check
   const [isAvailable] = useState(() => {
     if (!identity.availableUntil) return true;
     return new Date(identity.availableUntil).getTime() > Date.now();
   });
 
   const statusLabel = isAvailable
-    ? identity.status
-    : `${identity.title} · ${identity.location}`;
+    ? t(identity.status)
+    : `${t(identity.title)} · ${t(identity.location)}`;
 
   /* ── Motion Preference Listener ── */
   useEffect(() => {
@@ -89,12 +93,10 @@ export default function Hero({ scrollToSection }) {
         setCurrentIndex(next);
         setIsTransitioning(true);
 
-        // Conclude transition when animation finishes (550ms)
         transitionTimer = setTimeout(() => {
           if (!isMounted) return;
           setIsTransitioning(false);
           setPrevIndex(null);
-          // Queue the next cycle
           cycle();
         }, 550);
       }, 3000);
@@ -128,7 +130,6 @@ export default function Hero({ scrollToSection }) {
           const animate = (currentTime) => {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            // easeOutExpo
             const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
 
             setCounts(metrics.map((m) => Math.round(m.value * ease)));
@@ -201,7 +202,8 @@ export default function Hero({ scrollToSection }) {
       tabIndex={-1}
     >
       {/* Status Chip (Anchor to #contact with pulsating live signal) */}
-      <Reveal as="a"
+      <Reveal
+        as="a"
         href="#contact"
         className="status-chip glass-panel"
         onClick={(e) => scrollToSection(e, 'contact')}
@@ -217,43 +219,43 @@ export default function Hero({ scrollToSection }) {
 
       {/* Accessible Title with Visual Headline Cycler */}
       <Reveal>
-      <h1 id="hero-heading" className="hero-title">
-        <span className="sr-only">
-          {hero.headline} {phrases.join(', ')} {hero.headlineEnd}
-        </span>
-        <span aria-hidden="true" className="hero-title-visual">
-          <span className="hero-title-prefix">{hero.headline}</span>
-          {prefersReducedMotion ? (
-            <span className="cycling-phrase-container">
-              <span className="cycling-phrase gradient-text phrase-idle">
-                {phrases[0]}
-              </span>
-            </span>
-          ) : (
-            <span className="cycling-phrase-container">
-              {prevIndex !== null && (
-                <span
-                  key={`prev-${prevIndex}`}
-                  className="cycling-phrase phrase-exit gradient-text"
-                >
-                  {phrases[prevIndex]}
+        <h1 id="hero-heading" className="hero-title">
+          <span className="sr-only">
+            {t(hero.headline)} {phrases.join(', ')} {t(hero.headlineEnd)}
+          </span>
+          <span aria-hidden="true" className="hero-title-visual">
+            <span className="hero-title-prefix">{t(hero.headline)}</span>
+            {prefersReducedMotion ? (
+              <span className="cycling-phrase-container">
+                <span className="cycling-phrase gradient-text phrase-idle">
+                  {phrases[0]}
                 </span>
-              )}
-              <span
-                key={`curr-${currentIndex}`}
-                className={`cycling-phrase gradient-text ${isTransitioning ? 'phrase-enter' : 'phrase-idle'}`}
-              >
-                {phrases[currentIndex]}
               </span>
-            </span>
-          )}
-          <span className="hero-title-suffix">{hero.headlineEnd}</span>
-        </span>
-      </h1>
+            ) : (
+              <span className="cycling-phrase-container">
+                {prevIndex !== null && (
+                  <span
+                    key={`prev-${prevIndex}`}
+                    className="cycling-phrase phrase-exit gradient-text"
+                  >
+                    {phrases[prevIndex]}
+                  </span>
+                )}
+                <span
+                  key={`curr-${currentIndex}`}
+                  className={`cycling-phrase gradient-text ${isTransitioning ? 'phrase-enter' : 'phrase-idle'}`}
+                >
+                  {phrases[currentIndex]}
+                </span>
+              </span>
+            )}
+            <span className="hero-title-suffix">{t(hero.headlineEnd)}</span>
+          </span>
+        </h1>
       </Reveal>
 
       <Reveal as="p" className="hero-description">
-        {hero.subheadline}
+        {t(hero.subheadline)}
       </Reveal>
 
       {/* CTAs with Magnetic primary & Lucide icons */}
@@ -264,7 +266,7 @@ export default function Hero({ scrollToSection }) {
           className="btn btn-primary btn-magnetic"
           onClick={(e) => scrollToSection(e, 'projects')}
         >
-          <span>{hero.primaryCta}</span>
+          <span>{t(hero.primaryCta)}</span>
           <Icon name="arrow-down" size={18} />
         </a>
         <a
@@ -273,19 +275,30 @@ export default function Hero({ scrollToSection }) {
           onClick={(e) => scrollToSection(e, 'contact')}
         >
           <Icon name="mail" size={18} />
-          <span>{hero.secondaryCta}</span>
+          <span>{t(hero.secondaryCta)}</span>
         </a>
+        {identity.resumeUrl && (
+          <a
+            href={identity.resumeUrl}
+            download="Haythem-Chabbeh-CV.pdf"
+            className="btn btn-outline"
+            aria-label="Download my CV (PDF)"
+          >
+            <Icon name="download" size={18} />
+            <span>{t(hero.resumeCta, 'Download CV')}</span>
+          </a>
+        )}
       </Reveal>
 
       {/* Quick Metric Row */}
       <Reveal className="hero-metrics-row">
         {metrics.map((metric, i) => (
-          <div key={metric.label} className="metric-card glass-panel">
+          <div key={i} className="metric-card glass-panel">
             <span className="metric-value font-mono">
               {counts[i]}
               {metric.suffix}
             </span>
-            <span className="metric-label font-mono">{metric.label}</span>
+            <span className="metric-label font-mono">{t(metric.label)}</span>
           </div>
         ))}
       </Reveal>

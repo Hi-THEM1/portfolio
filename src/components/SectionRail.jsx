@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { portfolio } from '../content/portfolio';
+import { useLanguage } from '../i18n/useLanguage';
 import { onScroll, scrollTo } from '../lib/scroll';
 
 export default function SectionRail() {
   const { nav } = portfolio;
-  const sections = nav.links; // 5 sections: About, Education, Skills, Projects, Contact
+  const { t } = useLanguage();
+  const sections = nav.links;
   const [activeSection, setActiveSection] = useState('about');
   const lineFillRef = useRef(null);
 
@@ -53,20 +55,21 @@ export default function SectionRail() {
           <div ref={lineFillRef} className="rail-line-fill" />
         </div>
 
-        {/* 5 Section Dots */}
+        {/* Section Dots */}
         <ul className="rail-dots">
           {sections.map(({ label, sectionId }) => {
             const isActive = activeSection === sectionId;
+            const localizedLabel = t(label);
             return (
               <li key={sectionId} className="rail-dot-item">
                 <button
                   type="button"
                   className={`rail-dot ${isActive ? 'is-active' : ''}`}
                   onClick={() => handleDotClick(sectionId)}
-                  aria-label={`Go to ${label}`}
+                  aria-label={`Go to ${localizedLabel}`}
                   aria-current={isActive ? 'true' : undefined}
                 >
-                  <span className="rail-tooltip font-mono">{label}</span>
+                  <span className="rail-tooltip font-mono">{localizedLabel}</span>
                 </button>
               </li>
             );

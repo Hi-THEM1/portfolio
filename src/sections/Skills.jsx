@@ -1,23 +1,25 @@
 import { portfolio } from '../content/portfolio';
+import { useLanguage } from '../i18n/useLanguage';
 import Icon from '../components/Icon';
 import Reveal from '../components/Reveal';
 
 export default function Skills() {
   const { skills } = portfolio;
+  const { t } = useLanguage();
 
   const cards = [
     {
-      title: skills.coreTitle || 'Core Stack',
-      icon: skills.coreIcon || 'code',
+      title: skills.coreTitle || { en: 'Core Stack', fr: 'Technologies Clés' },
+      icon: skills.coreIcon || 'code-2',
       items: skills.core,
     },
     {
-      title: skills.learningTitle || 'Currently Learning',
+      title: skills.learningTitle || { en: 'Currently Learning', fr: 'En Cours d’Apprentissage' },
       icon: skills.learningIcon || 'cpu',
       items: skills.learning,
     },
     {
-      title: skills.toolsTitle || 'Tools & Platforms',
+      title: skills.toolsTitle || { en: 'Tools & Platforms', fr: 'Outils & Plateformes' },
       icon: skills.toolsIcon || 'wrench',
       items: skills.tools,
     },
@@ -31,27 +33,27 @@ export default function Skills() {
       tabIndex={-1}
     >
       <Reveal className="section-header">
-        <div className="section-label font-mono">{skills.sectionLabel}</div>
+        <div className="section-label font-mono">{t(skills.sectionLabel)}</div>
         <h2 id="skills-heading" className="section-title">
-          {skills.sectionTitle}
+          {t(skills.sectionTitle)}
         </h2>
       </Reveal>
 
       <div className="feature-grid">
         {cards.map((card, idx) => (
           <Reveal
-            key={card.title}
+            key={idx}
             className="glass-panel feature-card"
             delay={idx * 100}
           >
             <div className="card-icon" aria-hidden="true">
               <Icon name={card.icon} size={24} />
             </div>
-            <h3 className="card-title">{card.title}</h3>
+            <h3 className="card-title">{t(card.title)}</h3>
             <div className="skills-pill-list">
-              {card.items.map((item) => (
-                <span key={item} className="tech-pill">
-                  {item}
+              {card.items.map((item, itemIdx) => (
+                <span key={itemIdx} className="tech-pill">
+                  {t(item)}
                 </span>
               ))}
             </div>

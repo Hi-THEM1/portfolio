@@ -5,6 +5,26 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Immediate Theme & Language Initialization (Prevents flash of wrong theme) -->
+    <script>
+      (function() {
+        try {
+          var savedTheme = localStorage.getItem('theme');
+          var theme = savedTheme;
+          if (!theme) {
+            var mql = window.matchMedia('(prefers-color-scheme: light)');
+            theme = mql.matches ? 'light' : 'dark';
+          }
+          document.documentElement.dataset.theme = theme;
+
+          var savedLang = localStorage.getItem('lang') || 'en';
+          document.documentElement.lang = savedLang;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+
     <!-- SEO: Title & Description -->
     <title>Haythem Chabbeh — Computer Science &amp; IoT Student</title>
     <meta name="description" content="Portfolio of Haythem Chabbeh, a Computer Science and IoT student at the Higher Institute of Computer Science and Communication Technologies of Sousse, Tunisia, showcasing projects, skills, and education in software development, web development, IoT, and embedded systems." />
@@ -13,7 +33,7 @@
     <meta property="og:title" content="Haythem Chabbeh — Computer Science &amp; IoT Student" />
     <meta property="og:description" content="Portfolio of Haythem Chabbeh, showcasing projects, technical skills, and experience in modern web development, IoT, and software solutions." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://github.com/Hi-THEM" />
+    <meta property="og:url" content="https://haythem-chabbeh.netlify.app" />
 
     <!-- JSON-LD Person Schema -->
     <script type="application/ld+json">
@@ -22,13 +42,17 @@
       "@type": "Person",
       "name": "Haythem Chabbeh",
       "jobTitle": "Computer Science & IoT Student",
+      "url": "https://haythem-chabbeh.netlify.app",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Sousse",
         "addressCountry": "Tunisia"
       },
       "sameAs": [
-        "https://github.com/Hi-THEM"
+        "https://github.com/Hi-THEM1",
+        "https://www.linkedin.com/in/haythemchabbeh/",
+        "https://www.facebook.com/heythem.chabbeh",
+        "https://www.instagram.com/chabbeh_heythem/"
       ]
     }
     </script>

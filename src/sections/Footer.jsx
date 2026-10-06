@@ -1,4 +1,5 @@
 import { portfolio } from '../content/portfolio';
+import { useLanguage } from '../i18n/useLanguage';
 import Icon from '../components/Icon';
 
 const isRealUrl = (url) =>
@@ -8,6 +9,7 @@ const isRealUrl = (url) =>
 
 export default function Footer({ scrollToTop }) {
   const { socialLinks, identity, footer } = portfolio;
+  const { t } = useLanguage();
 
   return (
     <footer className="app-footer" role="contentinfo">
@@ -15,7 +17,7 @@ export default function Footer({ scrollToTop }) {
         <span>
           &copy; {new Date().getFullYear()} {identity.name}.
         </span>
-        <span className="footer-tagline">{footer.tagline}</span>
+        <span className="footer-tagline">{t(footer.tagline)}</span>
       </div>
 
       <div className="footer-center">
@@ -73,10 +75,10 @@ export default function Footer({ scrollToTop }) {
             target="_blank"
             rel="noopener noreferrer"
             className="footer-social-link"
-            aria-label={socialLinks.other.label}
+            aria-label={t(socialLinks.other.label)}
           >
-            <Icon name="share" size={16} />
-            <span>{socialLinks.other.label}</span>
+            <Icon name="globe" size={16} />
+            <span>{t(socialLinks.other.label)}</span>
           </a>
         )}
       </div>
@@ -86,9 +88,9 @@ export default function Footer({ scrollToTop }) {
           type="button"
           className="footer-top-link"
           onClick={scrollToTop}
-          aria-label={footer.backToTopLabel || 'Scroll back to top'}
+          aria-label={t(footer.backToTopLabel, 'Scroll back to top')}
         >
-          <span>{footer.backToTopLabel || 'Back to top'}</span>
+          <span>{t(footer.backToTopLabel, 'Back to top')}</span>
           <Icon name="arrow-up" size={16} />
         </button>
       </div>

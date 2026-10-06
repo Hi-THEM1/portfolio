@@ -1,10 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { portfolio } from '../content/portfolio';
 import { onScroll } from '../lib/scroll';
+import { useTheme } from '../context/useTheme';
+import { useLanguage } from '../i18n/useLanguage';
 import Icon from '../components/Icon';
 
 export default function Navbar({ scrollToSection }) {
   const { nav, identity } = portfolio;
+  const { theme, toggleTheme } = useTheme();
+  const { lang, toggleLang, t } = useLanguage();
+
   const [activeSection, setActiveSection] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -36,7 +41,6 @@ export default function Navbar({ scrollToSection }) {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const unsubscribe = onScroll(({ scroll, direction }) => {
-      // Hairline bottom border & background appears only once scrolled past 10px
       setIsScrolled(scroll > 10);
 
       if (!prefersReducedMotion) {
@@ -83,6 +87,11 @@ export default function Navbar({ scrollToSection }) {
     [scrollToSection]
   );
 
+  const targetLang = lang === 'en' ? 'FR' : 'EN';
+  const targetThemeIcon = theme === 'dark' ? 'sun' : 'moon';
+  const themeAria = t(nav.themeToggleAria, 'Switch to light/dark mode');
+  const langAria = t(nav.langToggleAria, 'Switch language');
+
   return (
     <header
       className={`app-header ${isScrolled ? 'is-scrolled' : ''} ${isHidden ? 'is-hidden' : ''}`}
@@ -108,10 +117,35 @@ export default function Navbar({ scrollToSection }) {
                 className={`nav-link ${activeSection === link.sectionId ? 'active' : ''}`}
                 onClick={(e) => handleNavClick(e, link.sectionId)}
               >
-                {link.label}
+                {t(link.label)}
               </button>
             </li>
           ))}
+
+          {/* Mobile menu controls: Theme toggle & Language switch */}
+          <li className="nav-mobile-toggles-row">
+            <button
+              type="button"
+              className="nav-toggle-btn"
+              onClick={toggleTheme}
+              aria-label={themeAria}
+              title={themeAria}
+            >
+              <Icon name={targetThemeIcon} size={18} />
+              <span className="font-mono">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+            </button>
+
+            <button
+              type="button"
+              className="nav-toggle-btn"
+              onClick={toggleLang}
+              aria-label={langAria}
+              title={langAria}
+            >
+              <Icon name="languages" size={18} />
+              <span className="nav-lang-badge">{targetLang}</span>
+            </button>
+          </li>
 
           {/* Mobile menu replacement for CTA button */}
           <li className="nav-item-cta-mobile">
@@ -121,35 +155,59 @@ export default function Navbar({ scrollToSection }) {
               onClick={(e) => handleNavClick(e, 'contact')}
             >
               <Icon name="mail" size={18} />
-              <span>{nav.ctaLabel || "Let's talk"}</span>
+              <span>{t(nav.ctaLabel, "Let's talk")}</span>
             </button>
           </li>
         </ul>
       </nav>
 
-      {/* Desktop header actions: status badge & right-aligned CTA button */}
+      {/* Desktop header actions: status badge, toggles & CTA button */}
       <div className="header-actions">
         <div className="header-status">
           <span
             className="sousse-meta font-mono"
-            title={nav.sousseTimeLabel || 'Local time in Sousse, Tunisia'}
+            title={t(nav.sousseTimeLabel, 'Local time in Sousse, Tunisia')}
           >
             <span className="status-dot" aria-hidden="true" />
-            <span className="sousse-tag">{nav.sousseLocation || 'Sousse, TN'}</span>
+            <span className="sousse-tag">{t(nav.sousseLocation, 'Sousse, TN')}</span>
             <span className="sousse-clock" aria-hidden="true">
               {sousseTime || '··:··'}
             </span>
           </span>
         </div>
 
+        {/* Theme and Language toggles */}
+        <div className="nav-util-group">
+          <button
+            type="button"
+            className="nav-toggle-btn"
+            onClick={toggleTheme}
+            aria-label={themeAria}
+            title={themeAria}
+          >
+            <Icon name={targetThemeIcon} size={18} />
+          </button>
+
+          <button
+            type="button"
+            className="nav-toggle-btn"
+            onClick={toggleLang}
+            aria-label={langAria}
+            title={langAria}
+          >
+            <Icon name="languages" size={18} />
+            <span className="nav-lang-badge">{targetLang}</span>
+          </button>
+        </div>
+
         <button
           type="button"
           className="btn btn-ghost nav-cta-btn btn-talk-desktop"
           onClick={(e) => handleNavClick(e, 'contact')}
-          aria-label="Contact — Let's talk"
+          aria-label={t(nav.ctaLabel, "Let's talk")}
         >
           <Icon name="mail" size={18} />
-          <span>{nav.ctaLabel || "Let's talk"}</span>
+          <span>{t(nav.ctaLabel, "Let's talk")}</span>
         </button>
       </div>
 
@@ -158,7 +216,7 @@ export default function Navbar({ scrollToSection }) {
         type="button"
         className={`hamburger ${menuOpen ? 'open' : ''}`}
         onClick={() => setMenuOpen((v) => !v)}
-        aria-label={nav.toggleMenuAria || 'Toggle navigation menu'}
+        aria-label={t(nav.toggleMenuAria, 'Toggle navigation menu')}
         aria-expanded={menuOpen}
       >
         <Icon name={menuOpen ? 'x' : 'menu'} size={24} />

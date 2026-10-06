@@ -9,14 +9,18 @@ import Projects from './sections/Projects';
 import Contact from './sections/Contact';
 import Footer from './sections/Footer';
 import SectionRail from './components/SectionRail';
-import GhostFibers from './components/GhostFibers';
+import Topography from './components/Topography';
 import Icon from './components/Icon';
 import { portfolio } from './content/portfolio';
+import { useTheme } from './context/useTheme';
+import { useLanguage } from './i18n/useLanguage';
 import { initScroll, destroyScroll, scrollTo, onScroll } from './lib/scroll';
 import { initRevealObserver } from './lib/reveal';
 import './App.css';
 
 export default function App() {
+  const { theme } = useTheme();
+  const { t } = useLanguage();
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   /* ── Centralized scroll engine & reveal observer ── */
@@ -51,42 +55,45 @@ export default function App() {
     scrollTo(0);
   }, []);
 
+  const isLight = theme === 'light';
+
   return (
     <div className="app-root">
-      {/* Global Fixed GhostFibers WebGL Background */}
-      <div className="ghost-fibers-bg" aria-hidden="true">
-        <GhostFibers
-          lineColor="#ff2d55"
-          glowColor="#8b5cf6"
-          speed={0.18}
-          scale={2.2}
-          rotation={0}
-          rotationSpeed={0.2}
-          layers={4}
-          waveAmplitude={0.015}
-          waveFrequency={3}
-          waveSpeed={0.15}
-          layerSpeed={0.08}
-          twist={0.1}
-          twistFrequency={5}
-          twistSpeed={1.2}
-          lineFrequency={5}
-          lineSpacing={2}
-          lineSharpness={16}
-          glowFalloff={10}
-          glowIntensity={1.5}
-          brightness={1.9}
-          blueBoost={1.25}
-          vignette={0.8}
-          grain={0.05}
-          dpr={1}
+      {/* Global Fixed Topography WebGL Background */}
+      <div className="topography-bg" aria-hidden="true">
+        <Topography
+          lowColor={isLight ? '#F0FDFA' : '#0B1120'}
+          midColor={isLight ? '#0F766E' : '#22D3EE'}
+          highColor={isLight ? '#0F766E' : '#FFFFFF'}
+          speed={isLight ? 0.75 : 0.65}
+          morphAmount={3.2}
+          morphSpeed={0.20}
+          bands={2.2}
+          thickness={isLight ? 0.015 : 0.012}
+          scale={1.0}
+          pixelSize={1.0}
+          glow={isLight ? 0.35 : 0.5}
+          colorMode="elevation"
+          contrast={isLight ? 2.6 : 3.0}
+          brightness={1.0}
+          fillBands={false}
+          opacity={isLight ? 0.85 : 1.0}
+          grain={true}
+          grainIntensity={0.04}
+          mouseInteraction={true}
+          mouseRadius={0.35}
+          mouseStrength={0.7}
+          lightMode={isLight}
         />
-        <div className="ghost-fibers-overlay" />
+        <div className="topography-overlay" />
       </div>
+
+      {/* Scrim Overlay between background layer (z:0) and content (z:2) */}
+      <div className="theme-scrim-overlay" aria-hidden="true" />
 
       {/* WCAG: Skip to Content link for keyboard accessibility */}
       <a href="#main-content" className="skip-link">
-        {portfolio.nav.skipToContent || 'Skip to main content'}
+        {t(portfolio.nav.skipToContent, 'Skip to main content')}
       </a>
 
       {/* Desktop Section Rail (>= 1280px) */}
@@ -123,7 +130,7 @@ export default function App() {
         type="button"
         className={`back-to-top ${showBackToTop ? 'visible' : ''}`}
         onClick={scrollToTop}
-        aria-label={portfolio.footer.backToTopLabel || 'Scroll back to top'}
+        aria-label={t(portfolio.footer.backToTopLabel, 'Scroll back to top')}
       >
         <Icon name="arrow-up" size={18} />
       </button>

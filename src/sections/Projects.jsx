@@ -1,4 +1,5 @@
 import { portfolio } from '../content/portfolio';
+import { useLanguage } from '../i18n/useLanguage';
 import Icon from '../components/Icon';
 import Reveal from '../components/Reveal';
 
@@ -9,9 +10,9 @@ const isRealUrl = (url) =>
 
 export default function Projects() {
   const { projects } = portfolio;
+  const { t } = useLanguage();
 
   const handleCardClick = (e, targetUrl) => {
-    // If the click came directly from an interactive anchor, let the anchor handle it
     if (e.target.closest('a')) return;
     if (targetUrl) {
       window.open(targetUrl, '_blank', 'noopener,noreferrer');
@@ -26,21 +27,22 @@ export default function Projects() {
       tabIndex={-1}
     >
       <Reveal className="section-header">
-        <div className="section-label font-mono">{projects.sectionLabel}</div>
+        <div className="section-label font-mono">{t(projects.sectionLabel)}</div>
         <h2 id="projects-heading" className="section-title">
-          {projects.sectionTitle}
+          {t(projects.sectionTitle)}
         </h2>
       </Reveal>
 
       <div className="projects-grid">
         {projects.items.map((project, i) => {
+          const projectName = t(project.name);
           const repoUrl = isRealUrl(project.githubUrl)
             ? project.githubUrl
-            : 'https://github.com/Hi-THEM/my_work';
+            : 'https://github.com/Hi-THEM1/my_work';
 
           return (
             <Reveal
-              key={project.name}
+              key={i}
               as="article"
               className="glass-panel project-card project-card-interactive"
               delay={i * 120}
@@ -53,36 +55,46 @@ export default function Projects() {
                   handleCardClick(e, repoUrl);
                 }
               }}
-              aria-label={`Open ${project.name} on GitHub`}
+              aria-label={`Open ${projectName} on GitHub`}
             >
+              {project.status && (
+                <div
+                  className={`project-badge ${project.isLoading ? 'is-loading' : ''}`}
+                  aria-label={`Status: ${t(project.status)}`}
+                >
+                  <span className="project-badge-dot" aria-hidden="true" />
+                  <span>{t(project.status)}</span>
+                </div>
+              )}
+
               <div className="project-card-header">
-                <Icon name="folder" size={22} className="project-folder-icon" />
+                <Icon name="folder-git-2" size={20} className="project-folder-icon" />
                 <a
                   href={repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="project-title-link"
-                  aria-label={`${project.name} GitHub Repository`}
+                  aria-label={`${projectName} GitHub Repository`}
                 >
-                  <h3 className="project-title">{project.name}</h3>
+                  <h3 className="project-title">{projectName}</h3>
                   <Icon name="arrow-up-right" size={16} className="project-title-arrow" />
                 </a>
               </div>
 
-              <p className="project-hook">{project.hook}</p>
-              <p className="project-description">{project.problem}</p>
+              <p className="project-hook">{t(project.hook)}</p>
+              <p className="project-description">{t(project.problem)}</p>
 
               <div className="project-tech-list">
-                {project.builtWith.map((tech) => (
-                  <span key={tech} className="tech-pill">
-                    {tech}
+                {project.builtWith.map((tech, techIdx) => (
+                  <span key={techIdx} className="tech-pill">
+                    {t(tech)}
                   </span>
                 ))}
               </div>
 
               <div className="project-learned">
-                <span className="learned-label">{projects.learnedLabel}</span>
-                <span className="learned-text">{project.learned}</span>
+                <span className="learned-label">{t(projects.learnedLabel)}</span>
+                <span className="learned-text">{t(project.learned)}</span>
               </div>
 
               <div className="project-links">
@@ -92,10 +104,10 @@ export default function Projects() {
                     className="project-link"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`${projects.githubLabel}: ${project.name}`}
+                    aria-label={`${t(projects.githubLabel)}: ${projectName}`}
                   >
                     <Icon name="github" size={16} />
-                    <span>{projects.githubLabel} Repo</span>
+                    <span>{t(projects.githubLabel)} Repo</span>
                   </a>
                 )}
                 {isRealUrl(project.liveUrl) && (
@@ -104,11 +116,17 @@ export default function Projects() {
                     className="project-link"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`${projects.liveDemoLabel}: ${project.name}`}
+                    aria-label={`${t(projects.liveDemoLabel)}: ${projectName}`}
                   >
                     <Icon name="external-link" size={16} />
-                    <span>{projects.liveDemoLabel}</span>
+                    <span>{t(projects.liveDemoLabel)}</span>
                   </a>
+                )}
+                {project.isLoading && (
+                  <span className="project-link-status" aria-label="Project in active development">
+                    <Icon name="loader-2" size={14} className="spin-icon" />
+                    <span>{t({ en: 'In Progress', fr: 'En cours' })}</span>
+                  </span>
                 )}
               </div>
             </Reveal>
