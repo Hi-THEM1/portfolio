@@ -99,10 +99,10 @@ export default function App() {
       {/* Desktop Section Rail (>= 1280px) */}
       <SectionRail />
 
-      <div className="app-container">
-        {/* 1. Navbar */}
-        <Navbar scrollToSection={scrollToSection} />
+      {/* 1. Header Navigation (Fixed & Smooth Follow) */}
+      <Navbar scrollToSection={scrollToSection} />
 
+      <div className="app-container">
         {/* Semantic main content area */}
         <main id="main-content" tabIndex={-1}>
           {/* 2. Hero */}

@@ -116,7 +116,7 @@
   width: 100%;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: var(--header-h, 64px) 24px 0;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -124,37 +124,86 @@
 
 /* ═══════════════════════════════════════════════════════
    HEADER & NAVIGATION
-   Sticky header with hairline border on scroll and developer tag brand
+   Fixed glassmorphism header that smoothly follows scroll
    ═══════════════════════════════════════════════════════ */
 
 .app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   height: var(--header-h, 64px);
+  z-index: 50;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: height 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease,
+              backdrop-filter 0.3s ease;
+}
+
+.app-header-inner {
+  width: 100%;
+  max-width: 1240px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid transparent;
-  background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  transition: transform var(--dur-base) var(--ease-out-soft),
-              background 0.25s ease,
-              border-color 0.25s ease,
-              backdrop-filter 0.25s ease;
 }
 
-.app-header.is-hidden {
-  transform: translateY(-100%);
-}
-
-/* Hairline bottom border and glass blur appear only when scrolled past 10px */
+/* Hairline bottom border, frosted glass blur, and compact profile when scrolled */
 .app-header.is-scrolled {
+  height: var(--header-scrolled-h, 54px);
   background: var(--header-bg);
   border-bottom: 1px solid var(--header-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 4px 20px -2px var(--header-shadow, rgba(0, 0, 0, 0.25));
+}
+
+/* Whisper reading progress indicator at header bottom */
+.nav-scroll-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--neon-red) 0%, var(--coral) 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.app-header.is-scrolled .nav-scroll-progress {
+  opacity: 1;
+}
+
+/* Streamlined compact elements when scrolled to maximize reading comfort */
+.app-header.is-scrolled .nav-toggle-btn {
+  min-height: 32px;
+  padding: 4px 8px;
+}
+
+.app-header.is-scrolled .nav-cta-btn {
+  min-height: 32px;
+  padding: 4px 12px;
+}
+
+.app-header.is-scrolled .sousse-meta {
+  padding: 4px 10px;
+}
+
+.app-header.is-scrolled .brand-tag {
+  font-size: 1.02rem;
 }
 
 /* Developer tag format brand: <name /> */
@@ -2059,7 +2108,7 @@
   .nav-links {
     display: none;
     position: fixed;
-    top: 70px;
+    top: var(--header-h, 64px);
     left: 0;
     right: 0;
     bottom: 0;
@@ -2073,6 +2122,11 @@
     -webkit-backdrop-filter: blur(20px);
     z-index: 55;
     overflow-y: auto;
+    transition: top 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .app-header.is-scrolled .nav-links {
+    top: var(--header-scrolled-h, 54px);
   }
 
   .nav-links.nav-open {
@@ -2131,7 +2185,19 @@
   }
 
   .app-header {
-    height: 70px;
+    height: var(--header-h, 64px);
+  }
+
+  .app-header.is-scrolled {
+    height: var(--header-scrolled-h, 54px);
+  }
+
+  .app-header-inner {
+    padding: 0 16px;
+  }
+
+  .app-container {
+    padding: var(--header-h, 64px) 16px 0;
   }
 
   .hero-section {
@@ -2408,8 +2474,10 @@
     transform: none !important;
   }
 
-  .app-header.is-hidden {
-    transform: none !important;
+  .app-header,
+  .app-header-inner,
+  .nav-scroll-progress {
+    transition: none !important;
   }
 
   .cycling-phrase,
