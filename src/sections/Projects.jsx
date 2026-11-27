@@ -68,7 +68,7 @@ export default function Projects() {
               )}
 
               <div className="project-card-header">
-                <Icon name="folder-git-2" size={20} className="project-folder-icon" />
+                <Icon name={project.icon || 'folder-git-2'} size={20} className="project-folder-icon" />
                 <a
                   href={repoUrl}
                   target="_blank"

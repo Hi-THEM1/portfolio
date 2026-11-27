@@ -441,6 +441,7 @@ export const portfolio = {
     items: [
       {
         name: 'FitTrack',
+        icon: 'heart-pulse',
         hook: {
           en: 'A web platform for personalized fitness and wellness tracking',
           fr: 'Plateforme web de suivi sportif personnalisé et de bien-être',
@@ -459,6 +460,7 @@ export const portfolio = {
       },
       {
         name: 'Inventory Pro',
+        icon: 'boxes',
         hook: {
           en: 'A modern web-based inventory management system',
           fr: 'Système web moderne de gestion des stocks et inventaires',
@@ -477,6 +479,7 @@ export const portfolio = {
       },
       {
         name: 'Amusement Park Workforce Scheduler',
+        icon: 'calendar-clock',
         status: {
           en: 'In Development',
           fr: 'En Cours de Développement',
@@ -497,6 +500,48 @@ export const portfolio = {
         },
         liveUrl: '',
         githubUrl: 'https://github.com/Hi-THEM1/my_work',
+      },
+      {
+        name: 'CTF_l404',
+        icon: 'flag',
+        hook: {
+          en: 'A full-stack narrative CTF & hackathon competition platform',
+          fr: 'Plateforme full-stack de CTF narratif et de hackathon',
+        },
+        problem: {
+          en: 'Louage 404 is a full-stack competition platform combining team registration, an 8-stage sequential detective CTF set in Tunisia, automated scoring with hint penalties, a live leaderboard, organizer audit controls, and an HMAC-derived cryptographic gate unlocking the Main Hackathon Challenge.',
+          fr: "Louage 404 est une plateforme de compétition full-stack réunissant l'inscription d'équipes, un CTF d'enquête séquentiel en 8 étapes se déroulant en Tunisie, un scoring automatique avec pénalités d'indices, un classement en direct, des outils d'audit organisateur et un accès cryptographique HMAC vers le défi principal.",
+        },
+        builtWith: ['Next.js', 'TypeScript', 'Tailwind CSS', 'PostgreSQL', 'Prisma', 'Better Auth', 'Vitest', 'Playwright'],
+        learned: {
+          en: 'Engineered server-only HMAC-SHA256 flag verification with timing-safe comparisons, Better Auth RBAC sessions, origin-checked CSRF protection, rate limiting, and end-to-end Playwright testing.',
+          fr: "Implémentation de vérifications de flags HMAC-SHA256 côté serveur à temps constant, sessions RBAC avec Better Auth, protection CSRF, limitation de débit et tests E2E Playwright.",
+        },
+        liveUrl: '',
+        githubUrl: 'https://github.com/Hi-THEM1/CTF_l404',
+      },
+      {
+        name: 'ProofPath',
+        icon: 'badge-check',
+        status: {
+          en: 'Hackathon Prototype',
+          fr: 'Prototype Hackathon',
+        },
+        hook: {
+          en: 'A skill passport connecting students and employers through verified work',
+          fr: 'Passeport de compétences reliant étudiants et employeurs par des preuves vérifiables',
+        },
+        problem: {
+          en: 'Built as a hackathon prototype to help students and graduates apply for jobs and internships with inspectable evidence of their skills — showcasing submitted work, assessed competencies, review feedback, and verified outcomes rather than relying solely on traditional CVs.',
+          fr: "Conçu comme prototype de hackathon pour permettre aux étudiants et diplômés de postuler avec des preuves vérifiables de leurs compétences — travaux soumis, évaluations, retours et résultats validés — au-delà du simple CV traditionnel.",
+        },
+        builtWith: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
+        learned: {
+          en: 'Designed dual student and employer user flows, evidence-backed application views, and rapid full-stack prototyping with Next.js App Router and Tailwind CSS v4.',
+          fr: "Conception de parcours distincts étudiant/employeur, interfaces de présentation de preuves vérifiables et prototypage rapide avec Next.js App Router et Tailwind CSS v4.",
+        },
+        liveUrl: 'https://proof-path-ten.vercel.app',
+        githubUrl: 'https://github.com/Hi-THEM1/ProofPath',
       },
     ],
   },
