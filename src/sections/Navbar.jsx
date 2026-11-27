@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { portfolio } from '../content/portfolio';
 import { onScroll } from '../lib/scroll';
 import { useTheme } from '../context/useTheme';
@@ -13,8 +13,8 @@ export default function Navbar({ scrollToSection }) {
   const [activeSection, setActiveSection] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
   const [sousseTime, setSousseTime] = useState('');
+  const progressRef = useRef(null);
 
   /* ── Live Sousse Clock (Africa/Tunis, 24h, tabular-nums) ── */
   useEffect(() => {
@@ -34,21 +34,15 @@ export default function Navbar({ scrollToSection }) {
     return () => clearInterval(interval);
   }, []);
 
-  /* ── Scroll handling for auto-hide & background elevation ── */
+  /* ── Scroll handling: smooth elevation & whisper reading progress ── */
   useEffect(() => {
-    const prefersReducedMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const unsubscribe = onScroll(({ scroll, progress }) => {
+      const scrolled = scroll > 15;
+      setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
 
-    const unsubscribe = onScroll(({ scroll, direction }) => {
-      setIsScrolled(scroll > 10);
-
-      if (!prefersReducedMotion) {
-        if (direction === 1 && scroll > 320) {
-          setIsHidden(true);
-        } else if (direction === -1 || scroll <= 320) {
-          setIsHidden(false);
-        }
+      if (progressRef.current) {
+        const clampedProgress = Math.min(Math.max(progress, 0), 1);
+        progressRef.current.style.transform = `scaleX(${clampedProgress})`;
       }
     });
 
@@ -94,36 +88,91 @@ export default function Navbar({ scrollToSection }) {
 
   return (
     <header
-      className={`app-header ${isScrolled ? 'is-scrolled' : ''} ${isHidden ? 'is-hidden' : ''}`}
+      className={`app-header ${isScrolled ? 'is-scrolled' : ''}`}
       role="banner"
     >
-      {/* Brand logo: JSX self-closing component tag format e.g. <haythem /> */}
-      <a
-        href="#hero"
-        className="brand-tag font-mono"
-        onClick={(e) => handleNavClick(e, 'hero')}
-        aria-label="Scroll to top"
-      >
-        {`<${identity.brandTag || 'haythem'} />`}
-      </a>
+      <div className="app-header-inner">
+        {/* Brand logo: JSX self-closing component tag format e.g. <haythem /> */}
+        <a
+          href="#hero"
+          className="brand-tag font-mono"
+          onClick={(e) => handleNavClick(e, 'hero')}
+          aria-label="Scroll to top"
+        >
+          {`<${identity.brandTag || 'haythem'} />`}
+        </a>
 
-      {/* Primary navigation */}
-      <nav aria-label="Primary navigation">
-        <ul className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
-          {nav.links.map((link) => (
-            <li key={link.sectionId}>
+        {/* Primary navigation */}
+        <nav aria-label="Primary navigation">
+          <ul className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
+            {nav.links.map((link) => (
+              <li key={link.sectionId}>
+                <button
+                  type="button"
+                  className={`nav-link ${activeSection === link.sectionId ? 'active' : ''}`}
+                  onClick={(e) => handleNavClick(e, link.sectionId)}
+                >
+                  {t(link.label)}
+                </button>
+              </li>
+            ))}
+
+            {/* Mobile menu controls: Theme toggle & Language switch */}
+            <li className="nav-mobile-toggles-row">
               <button
                 type="button"
-                className={`nav-link ${activeSection === link.sectionId ? 'active' : ''}`}
-                onClick={(e) => handleNavClick(e, link.sectionId)}
+                className="nav-toggle-btn"
+                onClick={toggleTheme}
+                aria-label={themeAria}
+                title={themeAria}
               >
-                {t(link.label)}
+                <Icon name={targetThemeIcon} size={18} />
+                <span className="font-mono">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+              </button>
+
+              <button
+                type="button"
+                className="nav-toggle-btn"
+                onClick={toggleLang}
+                aria-label={langAria}
+                title={langAria}
+              >
+                <Icon name="languages" size={18} />
+                <span className="nav-lang-badge">{targetLang}</span>
               </button>
             </li>
-          ))}
 
-          {/* Mobile menu controls: Theme toggle & Language switch */}
-          <li className="nav-mobile-toggles-row">
+            {/* Mobile menu replacement for CTA button */}
+            <li className="nav-item-cta-mobile">
+              <button
+                type="button"
+                className="btn btn-ghost nav-cta-btn nav-cta-btn-mobile"
+                onClick={(e) => handleNavClick(e, 'contact')}
+              >
+                <Icon name="mail" size={18} />
+                <span>{t(nav.ctaLabel, "Let's talk")}</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        {/* Desktop header actions: status badge, toggles & CTA button */}
+        <div className="header-actions">
+          <div className="header-status">
+            <span
+              className="sousse-meta font-mono"
+              title={t(nav.sousseTimeLabel, 'Local time in Sousse, Tunisia')}
+            >
+              <span className="status-dot" aria-hidden="true" />
+              <span className="sousse-tag">{t(nav.sousseLocation, 'Sousse, TN')}</span>
+              <span className="sousse-clock" aria-hidden="true">
+                {sousseTime || '··:··'}
+              </span>
+            </span>
+          </div>
+
+          {/* Theme and Language toggles */}
+          <div className="nav-util-group">
             <button
               type="button"
               className="nav-toggle-btn"
@@ -132,7 +181,6 @@ export default function Navbar({ scrollToSection }) {
               title={themeAria}
             >
               <Icon name={targetThemeIcon} size={18} />
-              <span className="font-mono">{theme === 'dark' ? 'Light' : 'Dark'}</span>
             </button>
 
             <button
@@ -145,82 +193,37 @@ export default function Navbar({ scrollToSection }) {
               <Icon name="languages" size={18} />
               <span className="nav-lang-badge">{targetLang}</span>
             </button>
-          </li>
-
-          {/* Mobile menu replacement for CTA button */}
-          <li className="nav-item-cta-mobile">
-            <button
-              type="button"
-              className="btn btn-ghost nav-cta-btn nav-cta-btn-mobile"
-              onClick={(e) => handleNavClick(e, 'contact')}
-            >
-              <Icon name="mail" size={18} />
-              <span>{t(nav.ctaLabel, "Let's talk")}</span>
-            </button>
-          </li>
-        </ul>
-      </nav>
-
-      {/* Desktop header actions: status badge, toggles & CTA button */}
-      <div className="header-actions">
-        <div className="header-status">
-          <span
-            className="sousse-meta font-mono"
-            title={t(nav.sousseTimeLabel, 'Local time in Sousse, Tunisia')}
-          >
-            <span className="status-dot" aria-hidden="true" />
-            <span className="sousse-tag">{t(nav.sousseLocation, 'Sousse, TN')}</span>
-            <span className="sousse-clock" aria-hidden="true">
-              {sousseTime || '··:··'}
-            </span>
-          </span>
-        </div>
-
-        {/* Theme and Language toggles */}
-        <div className="nav-util-group">
-          <button
-            type="button"
-            className="nav-toggle-btn"
-            onClick={toggleTheme}
-            aria-label={themeAria}
-            title={themeAria}
-          >
-            <Icon name={targetThemeIcon} size={18} />
-          </button>
+          </div>
 
           <button
             type="button"
-            className="nav-toggle-btn"
-            onClick={toggleLang}
-            aria-label={langAria}
-            title={langAria}
+            className="btn btn-ghost nav-cta-btn btn-talk-desktop"
+            onClick={(e) => handleNavClick(e, 'contact')}
+            aria-label={t(nav.ctaLabel, "Let's talk")}
           >
-            <Icon name="languages" size={18} />
-            <span className="nav-lang-badge">{targetLang}</span>
+            <Icon name="mail" size={18} />
+            <span>{t(nav.ctaLabel, "Let's talk")}</span>
           </button>
         </div>
 
+        {/* Hamburger toggle (mobile with Lucide menu/x icon) */}
         <button
           type="button"
-          className="btn btn-ghost nav-cta-btn btn-talk-desktop"
-          onClick={(e) => handleNavClick(e, 'contact')}
-          aria-label={t(nav.ctaLabel, "Let's talk")}
+          className={`hamburger ${menuOpen ? 'open' : ''}`}
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label={t(nav.toggleMenuAria, 'Toggle navigation menu')}
+          aria-expanded={menuOpen}
         >
-          <Icon name="mail" size={18} />
-          <span>{t(nav.ctaLabel, "Let's talk")}</span>
+          <Icon name={menuOpen ? 'x' : 'menu'} size={24} />
         </button>
       </div>
 
-      {/* Hamburger toggle (mobile with Lucide menu/x icon) */}
-      <button
-        type="button"
-        className={`hamburger ${menuOpen ? 'open' : ''}`}
-        onClick={() => setMenuOpen((v) => !v)}
-        aria-label={t(nav.toggleMenuAria, 'Toggle navigation menu')}
-        aria-expanded={menuOpen}
-      >
-        <Icon name={menuOpen ? 'x' : 'menu'} size={24} />
-      </button>
+      {/* Whisper reading progress indicator for non-intrusive scroll awareness */}
+      <div
+        ref={progressRef}
+        className="nav-scroll-progress"
+        aria-hidden="true"
+      />
     </header>
   );
 }
